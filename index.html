@@ -18,40 +18,58 @@
             --btn-anki: #3b82f6;
         }
 
-        body { font-family: sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 0; }
-        .app-header { background: var(--white); padding: 20px; text-align: center; border-bottom: 1px solid #e2e8f0; }
-        .app-header h1 { margin: 0; font-size: 1.2rem; font-weight: 800; color: var(--accent); }
-        .app-header p { margin: 5px 0 0; font-size: 0.8rem; color: #64748b; }
+        body { 
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif; 
+            background-color: var(--bg); 
+            color: var(--text); 
+            margin: 0; 
+            padding: 0; 
+            line-height: 1.6;
+        }
+
+        .app-header { 
+            background: var(--white); 
+            padding: 24px 20px; 
+            text-align: center; 
+            border-bottom: 1px solid #e2e8f0; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .app-header h1 { margin: 0; font-size: 1.25rem; font-weight: 800; color: var(--accent); }
+        .app-header p { margin: 8px 0 0; font-size: 0.85rem; color: #64748b; }
 
         .container { padding: 15px; max-width: 600px; margin: 0 auto; }
 
-        /* タブ切り替え */
-        .tabs { display: flex; gap: 8px; margin-bottom: 15px; }
+        .tabs { display: flex; gap: 8px; margin-bottom: 20px; }
         .tab-label { 
             flex: 1; padding: 12px 0; text-align: center; background: #e2e8f0; cursor: pointer; 
-            font-weight: bold; border-radius: 8px; color: #64748b; font-size: 0.85rem; transition: 0.2s;
+            font-weight: bold; border-radius: 10px; color: #64748b; font-size: 0.85rem; transition: all 0.2s;
         }
         input[type="radio"] { display: none; }
 
-        .tab-content { display: none; }
+        .tab-content { display: none; animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         #g1:checked ~ .tabs label[for="g1"],
         #g2:checked ~ .tabs label[for="g2"],
         #g3:checked ~ .tabs label[for="g3"] {
             background: var(--accent); color: var(--white);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
-        #g1:checked ~ .content-g1, #g2:checked ~ .content-g2, #g3:checked ~ .content-g3 { display: block; }
 
-        /* アコーディオン */
-        details { background: var(--white); margin-bottom: 10px; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden; }
+        details { background: var(--white); margin-bottom: 12px; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden; transition: all 0.3s; }
+        details[open] { box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        
         summary { 
-            padding: 16px; cursor: pointer; font-weight: bold; list-style: none;
-            display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem;
+            padding: 18px; cursor: pointer; font-weight: bold; list-style: none;
+            display: flex; justify-content: space-between; align-items: center; font-size: 0.95rem;
         }
         summary::-webkit-details-marker { display: none; }
-        summary::after { content: "＋"; color: #94a3b8; }
-        details[open] summary::after { content: "－"; }
+        summary::after { content: "＋"; font-size: 1.2rem; color: #94a3b8; transition: 0.3s; }
+        details[open] summary::after { transform: rotate(45deg); content: "＋"; }
 
-        /* 科目別カラーバー */
         .subj-crown { border-left: 6px solid #3b82f6; }
         .subj-horizon { border-left: 6px solid #2563eb; }
         .subj-sunshine { border-left: 6px solid #1d4ed8; }
@@ -59,33 +77,44 @@
         .subj-his { border-left: 6px solid var(--his-color); }
         .subj-geo { border-left: 6px solid var(--geo-color); }
 
-        /* リスト */
         .page-list { list-style: none; padding: 0; margin: 0; border-top: 1px solid #f1f5f9; }
         .page-item { 
             display: flex; justify-content: space-between; align-items: center; 
-            padding: 12px 15px; border-bottom: 1px solid #f1f5f9; 
+            padding: 14px 18px; border-bottom: 1px solid #f1f5f9; 
+            background: #fff;
         }
-        .p-range { font-weight: bold; font-size: 0.82rem; color: #475569; }
+        .page-item:last-child { border-bottom: none; }
+        .p-range { font-weight: 600; font-size: 0.85rem; color: #475569; }
 
-        /* ボタン */
-        .btn-group { display: flex; gap: 6px; }
+        .btn-group { display: flex; gap: 8px; }
         .action-btn { 
-            text-decoration: none; font-size: 0.7rem; font-weight: bold; padding: 8px 10px; 
-            border-radius: 6px; color: #fff; min-width: 45px; text-align: center;
+            text-decoration: none; font-size: 0.75rem; font-weight: bold; padding: 8px 14px; 
+            border-radius: 8px; color: #fff; min-width: 50px; text-align: center;
+            transition: 0.2s; display: inline-block;
         }
-        .btn-anki { background-color: var(--btn-anki); }
-        .btn-test { background-color: var(--btn-test); }
-        .action-btn:active { opacity: 0.7; transform: scale(0.95); }
+        .btn-anki { background-color: var(--btn-anki); box-shadow: 0 2px 0 #2563eb; }
+        .btn-test { background-color: var(--btn-test); box-shadow: 0 2px 0 #dc2626; }
         
-        /* リンクがないボタンのスタイル */
-        .btn-disabled { background-color: #cbd5e1; cursor: default; pointer-events: none; }
+        .action-btn:active { transform: translateY(2px); box-shadow: none; }
+        
+        .btn-disabled { 
+            background-color: #e2e8f0; 
+            color: #94a3b8;
+            box-shadow: none;
+            cursor: default; 
+            pointer-events: none; 
+        }
+
+        #g1:checked ~ #content-area .content-g1, 
+        #g2:checked ~ #content-area .content-g2, 
+        #g3:checked ~ #content-area .content-g3 { display: block; }
     </style>
 </head>
 <body>
 
 <header class="app-header">
-    <h1>テスト対策に最適！単語暗記アプリ</h1>
-    <p>学年と科目を選んで学習スタート</p>
+    <h1>テスト対策！単語暗記アプリ</h1>
+    <p>学年と科目を選んで学習を始めよう</p>
 </header>
 
 <div class="container">
@@ -99,89 +128,143 @@
         <label class="tab-label" for="g3">中学3年</label>
     </div>
 
-    <script>
-        // --- 設定エリア：リンクの管理 ---
-        const baseURL = "https://mantenlab.com/vocabulary-test/";
-        
-        // 中1理科のデータ設定（全15項目に拡充）
-        const g1RikaData = [
-            { label: "P.2 - 17", ankiFile: "1_rika_2-17.html", testFile: "" },
-            { label: "P.20 - 30", ankiFile: "1_rika_20-30.html", testFile: "" },
-            { label: "P.31 - 34", ankiFile: "1_rika_31-34.html", testFile: "" },
-            { label: "P.36 - 52", ankiFile: "1_rika_36-52.html", testFile: "rika_sample.html" },
-            { label: "P.64 - 82", ankiFile: "1_rika_64-82.html", testFile: "" },
-            { label: "P.84 - 97", ankiFile: "1_rika_84-97.html", testFile: "" },
-            { label: "P.100 - 117", ankiFile: "1_rika_100-117.html", testFile: "" },
-            // --- 今回追加された単元 ---
-            { label: "P.128 - 149", ankiFile: "1_rika_128,129137-149.html", testFile: "" },
-            { label: "P.151 - 160", ankiFile: "1_rika_151-160.html", testFile: "" },
-            { label: "P.161 - 172", ankiFile: "1_rika_161-172.html", testFile: "" },
-            { label: "P.173 - 188", ankiFile: "1_rika_173-188.html", testFile: "" },
-            { label: "P.201 - 212", ankiFile: "1_rika_201-212.html", testFile: "" },
-            { label: "P.214 - 220", ankiFile: "1_rika_214-220.html", testFile: "" },
-            { label: "P.223 - 230", ankiFile: "1_rika_223-230.html", testFile: "" },
-            { label: "P.233 - 247", ankiFile: "1_rika_233-247.html", testFile: "" }
-        ];
-
-        const gradeContents = ["content-g1", "content-g2", "content-g3"];
-        const subjects = [
-            { name: "英語 (NEW CROWN)", class: "subj-crown" },
-            { name: "英語 (NEW HORIZON)", class: "subj-horizon" },
-            { name: "英語 (Sunshine)", class: "subj-sunshine" },
-            { name: "理科", class: "subj-sci" },
-            { name: "歴史", class: "subj-his" },
-            { name: "地理", class: "subj-geo" }
-        ];
-
-        gradeContents.forEach((contentClass, gIdx) => {
-            document.write(`<div class="tab-content ${contentClass}">`);
-            
-            subjects.forEach(sub => {
-                document.write(`
-                    <details class="${sub.class}">
-                        <summary>${sub.name}</summary>
-                        <ul class="page-list">
-                `);
-
-                if (gIdx === 0 && sub.name === "理科") {
-                    g1RikaData.forEach(item => {
-                        const ankiUrl = baseURL + item.ankiFile;
-                        const hasTest = item.testFile !== "";
-                        const testUrl = hasTest ? baseURL + item.testFile : "#";
-                        const testClass = hasTest ? "action-btn btn-test" : "action-btn btn-test btn-disabled";
-
-                        document.write(`
-                            <li class="page-item">
-                                <span class="p-range">${item.label}</span>
-                                <div class="btn-group">
-                                    <a href="${ankiUrl}" class="action-btn btn-anki" target="_blank">暗記</a>
-                                    <a href="${testUrl}" class="${testClass}" ${hasTest ? 'target="_blank"' : ''}>テスト</a>
-                                </div>
-                            </li>
-                        `);
-                    });
-                } else {
-                    // 他の科目や学年のダミーデータ
-                    for (let i = 0; i < 5; i++) {
-                        document.write(`
-                            <li class="page-item">
-                                <span class="p-range">準備中</span>
-                                <div class="btn-group">
-                                    <a href="#" class="action-btn btn-anki btn-disabled">暗記</a>
-                                    <a href="#" class="action-btn btn-test btn-disabled">テスト</a>
-                                </div>
-                            </li>
-                        `);
-                    }
-                }
-
-                document.write(`</ul></details>`);
-            });
-
-            document.write(`</div>`);
-        });
-    </script>
+    <div id="content-area"></div>
 </div>
+
+<script>
+    const baseURL = "https://mantenlab.com/vocabulary-test/";
+    
+    // 中1 英語
+    const g1EnglishNHFiles = ["1_English_NH_U4.html", "1_English_NH_U5.html", "1_English_NH_U6.html", "1_English_NH_U7.html", "1_English_NH_U8.html", "1_English_NH_U9.html", "1_English_NH_U10.html", "1_English_NH_RL.html"];
+    const g1EnglishSSFiles = ["1_English_SS_P4.html", "1_English_SS_P5.html", "1_English_SS_P6.html", "1_English_SS_P7.html", "1_English_SS_P8.html", "1_English_SS_P9.html", "1_English_SS_P10.html"];
+
+    // 中1 理科 (共有いただいたファイルを追加)
+    const g1RikaFiles = [
+        "1_rika_2-17.html",
+        "1_rika_20-30.html",
+        "1_rika_31-34.html",
+        "1_rika_36-52.html",
+        "1_rika_64-82.html",
+        "1_rika_84-97.html",
+        "1_rika_100-117.html",
+        "1_rika_128,129137-149.html",
+        "1_rika_151-160.html",
+        "1_rika_161-172.html",
+        "1_rika_173-188.html", // 追加
+        "1_rika_201-212.html", // 追加
+        "1_rika_214-220.html", // 追加
+        "1_rika_223-230.html", // 追加
+        "1_rika_233-247.html"  // 追加
+    ];
+
+    // 中1 歴史
+    const g1RekishiFiles = [
+        "1_rekishi_63-67.html", "1_rekishi_68-69.html", "1_rekishi_70-71.html",
+        "1_rekishi_72-75.html", "1_rekishi_78-81.html", "1_rekishi_84-85.html",
+        "1_rekishi_86-89.html", "1_rekishi_92-95.html", "1_rekishi_96-97.html",
+        "1_rekishi_98-101.html",
+        "1_rekishi_105-107.html", "1_rekishi_108-111.html", "1_rekishi_112-113.html",
+        "1_rekishi_116-117.html", "1_rekishi_118-119.html", "1_rekishi_120-123.html",
+        "1_rekishi_124-125.html", "1_rekishi_126-127.html", "1_rekishi_128-129.html",
+        "1_rekishi_130-131.html",
+        "1_rekishi_136-139.html", "1_rekishi_140-141.html", "1_rekishi_142-143.html",
+        "1_rekishi_144-145.html", "1_rekishi_146-149.html"
+    ];
+
+    // 中2 英語
+    const g2EnglishNCFiles = ["2_English_NC_L4.html", "2_English_NC_L5.html", "2_English_NC_L6.html", "2_English_NC_L7.html", "2_English_NC_L8.html", "2_English_NC_RL2.html", "2_English_NC_RL3.html"];
+    const g2EnglishSSFiles = ["2_English_SS_P4.html", "2_English_SS_P5.html", "2_English_SS_P6.html", "2_English_SS_P7.html", "2_English_SS_P8.html", "2_English_SS_R2.html", "2_English_SS_R3.html"];
+
+    // 中2 理科
+    const g2RikaFiles = ["2_rika_5-17.html", "2_rika_18-24.html", "2_rika_25-32.html", "2_rika_34-43.html", "2_rika_44-49.html", "2_rika_51-59.html", "2_rika_70-79.html", "2_rika_80-91.html", "2_rika_94-107.html", "2_rika_108-123.html", "2_rika_141-152.html", "2_rika_153-171.html", "2_rika_173-177.html", "2_rika_178-188.html", "2_rika_189-199.html", "2_rika_211-224.html", "2_rika_225-234.html", "2_rika_235-241.html", "2_rika_242-252.html", "2_rika_255-261.html", "2_rika_262-271.html"];
+
+    // ラベル整形（英語）
+    function formatLabel(fileName) {
+        const nameWithoutExt = fileName.replace('.html', '');
+        const parts = nameWithoutExt.split('_');
+        const lastPart = parts[parts.length - 1].toLowerCase();
+        if (lastPart.startsWith('p')) return `Part ${lastPart.substring(1)}`;
+        if (lastPart.startsWith('u')) return `Unit ${lastPart.substring(1)}`;
+        if (lastPart.startsWith('l') && !lastPart.startsWith('rl')) return `Lesson ${lastPart.substring(1)}`;
+        if (lastPart.startsWith('r') && !lastPart.startsWith('rl')) return `Reading ${lastPart.substring(1)}`;
+        if (lastPart.startsWith('rl')) {
+            const num = lastPart.substring(2);
+            return num ? `Reading Lesson ${num}` : "Read Aloud";
+        }
+        return lastPart.toUpperCase();
+    }
+
+    // ラベル整形（理科・歴史） P.96-97 -> 96-97 の表示形式
+    function formatRangeLabel(fileName) {
+        // ファイル名の末尾にある数字とハイフン部分を抽出
+        const match = fileName.match(/_([0-9,\-]+)\.html$/);
+        return match ? match[1] : fileName;
+    }
+
+    const contentArea = document.getElementById('content-area');
+    let finalHtml = "";
+
+    [0, 1, 2].forEach(gIdx => {
+        const gradeNum = gIdx + 1;
+        finalHtml += `<div class="tab-content content-g${gradeNum}">`;
+        
+        const subjects = [
+            { name: "英語 (Sunshine)", class: "subj-sunshine", hideInG1: false, hideInG2: false },
+            { name: "英語 (NEW CROWN)", class: "subj-crown", hideInG1: true, hideInG2: false },
+            { name: "英語 (NEW HORIZON)", class: "subj-horizon", hideInG1: false, hideInG2: true },
+            { name: "理科", class: "subj-sci", hideInG1: false, hideInG2: false },
+            { name: "歴史", class: "subj-his", hideInG1: false, hideInG2: false },
+            { name: "地理", class: "subj-geo", hideInG1: false, hideInG2: false }
+        ];
+
+        subjects.forEach(sub => {
+            if (gIdx === 0 && sub.hideInG1) return;
+            if (gIdx === 1 && sub.hideInG2) return;
+
+            finalHtml += `
+                <details class="${sub.class}">
+                    <summary>${sub.name}</summary>
+                    <ul class="page-list">
+            `;
+
+            let currentFiles = [];
+            let isRangeType = false;
+
+            if (gIdx === 0) {
+                if (sub.name === "英語 (Sunshine)") currentFiles = g1EnglishSSFiles;
+                else if (sub.name === "英語 (NEW HORIZON)") currentFiles = g1EnglishNHFiles;
+                else if (sub.name === "理科") { currentFiles = g1RikaFiles; isRangeType = true; }
+                else if (sub.name === "歴史") { currentFiles = g1RekishiFiles; isRangeType = true; }
+            } else if (gIdx === 1) {
+                if (sub.name === "英語 (Sunshine)") currentFiles = g2EnglishSSFiles;
+                else if (sub.name === "英語 (NEW CROWN)") currentFiles = g2EnglishNCFiles;
+                else if (sub.name === "理科") { currentFiles = g2RikaFiles; isRangeType = true; }
+            }
+
+            if (currentFiles.length > 0) {
+                currentFiles.forEach(file => {
+                    const label = isRangeType ? formatRangeLabel(file) : formatLabel(file);
+                    finalHtml += `
+                        <li class="page-item">
+                            <span class="p-range">${label}</span>
+                            <div class="btn-group">
+                                <a href="${baseURL}${file}" class="action-btn btn-anki" target="_blank">暗記</a>
+                                <a href="#" class="action-btn btn-test btn-disabled">テスト</a>
+                            </div>
+                        </li>`;
+                });
+            } else {
+                for (let i = 0; i < 3; i++) {
+                    finalHtml += `<li class="page-item"><span class="p-range">準備中...</span><div class="btn-group"><a href="#" class="action-btn btn-anki btn-disabled">暗記</a><a href="#" class="action-btn btn-test btn-disabled">テスト</a></div></li>`;
+                }
+            }
+            finalHtml += `</ul></details>`;
+        });
+        finalHtml += `</div>`;
+    });
+
+    contentArea.innerHTML = finalHtml;
+</script>
 
 </body>
 </html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>単語暗記アプリ</title>
+    <style>
+        :root {
+            --bg: #f8fafc;
+            --white: #ffffff;
+            --accent: #1e293b;
+            --en-color: #3b82f6;
+            --sci-color: #10b981;
+            --his-color: #f59e0b;
+            --geo-color: #059669;
+            --text: #334155;
+            --btn-test: #ef4444;
+            --btn-anki: #3b82f6;
+        }
+
+        body { font-family: sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 0; }
+        .app-header { background: var(--white); padding: 20px; text-align: center; border-bottom: 1px solid #e2e8f0; }
+        .app-header h1 { margin: 0; font-size: 1.2rem; font-weight: 800; color: var(--accent); }
+        .app-header p { margin: 5px 0 0; font-size: 0.8rem; color: #64748b; }
+
+        .container { padding: 15px; max-width: 600px; margin: 0 auto; }
+
+        /* タブ切り替え */
+        .tabs { display: flex; gap: 8px; margin-bottom: 15px; }
+        .tab-label { 
+            flex: 1; padding: 12px 0; text-align: center; background: #e2e8f0; cursor: pointer; 
+            font-weight: bold; border-radius: 8px; color: #64748b; font-size: 0.85rem; transition: 0.2s;
+        }
+        input[type="radio"] { display: none; }
+
+        .tab-content { display: none; }
+        #g1:checked ~ .tabs label[for="g1"],
+        #g2:checked ~ .tabs label[for="g2"],
+        #g3:checked ~ .tabs label[for="g3"] {
+            background: var(--accent); color: var(--white);
+        }
+        #g1:checked ~ .content-g1, #g2:checked ~ .content-g2, #g3:checked ~ .content-g3 { display: block; }
+
+        /* アコーディオン */
+        details { background: var(--white); margin-bottom: 10px; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden; }
+        summary { 
+            padding: 16px; cursor: pointer; font-weight: bold; list-style: none;
+            display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem;
+        }
+        summary::-webkit-details-marker { display: none; }
+        summary::after { content: "＋"; color: #94a3b8; }
+        details[open] summary::after { content: "－"; }
+
+        /* 科目別カラーバー */
+        .subj-crown { border-left: 6px solid #3b82f6; }
+        .subj-horizon { border-left: 6px solid #2563eb; }
+        .subj-sunshine { border-left: 6px solid #1d4ed8; }
+        .subj-sci { border-left: 6px solid var(--sci-color); }
+        .subj-his { border-left: 6px solid var(--his-color); }
+        .subj-geo { border-left: 6px solid var(--geo-color); }
+
+        /* リスト */
+        .page-list { list-style: none; padding: 0; margin: 0; border-top: 1px solid #f1f5f9; }
+        .page-item { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 12px 15px; border-bottom: 1px solid #f1f5f9; 
+        }
+        .p-range { font-weight: bold; font-size: 0.82rem; color: #475569; }
+
+        /* ボタン */
+        .btn-group { display: flex; gap: 6px; }
+        .action-btn { 
+            text-decoration: none; font-size: 0.7rem; font-weight: bold; padding: 8px 10px; 
+            border-radius: 6px; color: #fff; min-width: 45px; text-align: center;
+        }
+        .btn-anki { background-color: var(--btn-anki); }
+        .btn-test { background-color: var(--btn-test); }
+        .action-btn:active { opacity: 0.7; transform: scale(0.95); }
+        
+        /* リンクがないボタンのスタイル */
+        .btn-disabled { background-color: #cbd5e1; cursor: default; pointer-events: none; }
+    </style>
+</head>
+<body>
+
+<header class="app-header">
+    <h1>テスト対策に最適！単語暗記アプリ</h1>
+    <p>学年と科目を選んで学習スタート</p>
+</header>
+
+<div class="container">
+    <input type="radio" name="grade" id="g1" checked>
+    <input type="radio" name="grade" id="g2">
+    <input type="radio" name="grade" id="g3">
+
+    <div class="tabs">
+        <label class="tab-label" for="g1">中学1年</label>
+        <label class="tab-label" for="g2">中学2年</label>
+        <label class="tab-label" for="g3">中学3年</label>
+    </div>
+
+    <script>
+        // --- 設定エリア：リンクの管理 ---
+        const baseURL = "https://mantenlab.com/vocabulary-test/";
+        
+        // 中1理科のデータ設定（全15項目に拡充）
+        const g1RikaData = [
+            { label: "P.2 - 17", ankiFile: "1_rika_2-17.html", testFile: "" },
+            { label: "P.20 - 30", ankiFile: "1_rika_20-30.html", testFile: "" },
+            { label: "P.31 - 34", ankiFile: "1_rika_31-34.html", testFile: "" },
+            { label: "P.36 - 52", ankiFile: "1_rika_36-52.html", testFile: "rika_sample.html" },
+            { label: "P.64 - 82", ankiFile: "1_rika_64-82.html", testFile: "" },
+            { label: "P.84 - 97", ankiFile: "1_rika_84-97.html", testFile: "" },
+            { label: "P.100 - 117", ankiFile: "1_rika_100-117.html", testFile: "" },
+            // --- 今回追加された単元 ---
+            { label: "P.128 - 149", ankiFile: "1_rika_128,129137-149.html", testFile: "" },
+            { label: "P.151 - 160", ankiFile: "1_rika_151-160.html", testFile: "" },
+            { label: "P.161 - 172", ankiFile: "1_rika_161-172.html", testFile: "" },
+            { label: "P.173 - 188", ankiFile: "1_rika_173-188.html", testFile: "" },
+            { label: "P.201 - 212", ankiFile: "1_rika_201-212.html", testFile: "" },
+            { label: "P.214 - 220", ankiFile: "1_rika_214-220.html", testFile: "" },
+            { label: "P.223 - 230", ankiFile: "1_rika_223-230.html", testFile: "" },
+            { label: "P.233 - 247", ankiFile: "1_rika_233-247.html", testFile: "" }
+        ];
+
+        const gradeContents = ["content-g1", "content-g2", "content-g3"];
+        const subjects = [
+            { name: "英語 (NEW CROWN)", class: "subj-crown" },
+            { name: "英語 (NEW HORIZON)", class: "subj-horizon" },
+            { name: "英語 (Sunshine)", class: "subj-sunshine" },
+            { name: "理科", class: "subj-sci" },
+            { name: "歴史", class: "subj-his" },
+            { name: "地理", class: "subj-geo" }
+        ];
+
+        gradeContents.forEach((contentClass, gIdx) => {
+            document.write(`<div class="tab-content ${contentClass}">`);
+            
+            subjects.forEach(sub => {
+                document.write(`
+                    <details class="${sub.class}">
+                        <summary>${sub.name}</summary>
+                        <ul class="page-list">
+                `);
+
+                if (gIdx === 0 && sub.name === "理科") {
+                    g1RikaData.forEach(item => {
+                        const ankiUrl = baseURL + item.ankiFile;
+                        const hasTest = item.testFile !== "";
+                        const testUrl = hasTest ? baseURL + item.testFile : "#";
+                        const testClass = hasTest ? "action-btn btn-test" : "action-btn btn-test btn-disabled";
+
+                        document.write(`
+                            <li class="page-item">
+                                <span class="p-range">${item.label}</span>
+                                <div class="btn-group">
+                                    <a href="${ankiUrl}" class="action-btn btn-anki" target="_blank">暗記</a>
+                                    <a href="${testUrl}" class="${testClass}" ${hasTest ? 'target="_blank"' : ''}>テスト</a>
+                                </div>
+                            </li>
+                        `);
+                    });
+                } else {
+                    // 他の科目や学年のダミーデータ
+                    for (let i = 0; i < 5; i++) {
+                        document.write(`
+                            <li class="page-item">
+                                <span class="p-range">準備中</span>
+                                <div class="btn-group">
+                                    <a href="#" class="action-btn btn-anki btn-disabled">暗記</a>
+                                    <a href="#" class="action-btn btn-test btn-disabled">テスト</a>
+                                </div>
+                            </li>
+                        `);
+                    }
+                }
+
+                document.write(`</ul></details>`);
+            });
+
+            document.write(`</div>`);
+        });
+    </script>
+</div>
+
+</body>
+</html>
